@@ -1,0 +1,95 @@
+<div>
+    <h2 id="page-heading">
+        <span>Transactions</span>
+        <button id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-transaction" [routerLink]="['/transaction/new']">
+            <fa-icon [icon]="'plus'"></fa-icon>
+            <span >
+            Create a new Transaction
+            </span>
+        </button>
+    </h2>
+    <jhi-alert></jhi-alert>
+    <br/>
+    <div class="alert alert-warning" *ngIf="transactions?.length === 0">
+        <span>No transactions found</span>
+    </div>
+    <div class="table-responsive" *ngIf="transactions?.length > 0">
+        <table class="table table-striped" aria-describedby="page-heading">
+            <thead>
+            <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="transition.bind(this)">
+            <th jhiSortBy="id"><span>ID</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="date"><span>Date</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="frais"><span>Frais</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="comEnvoi"><span>Com Envoi</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="comRetrait"><span>Com Retrait</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="comSysteme"><span>Com Systeme</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="comEtat"><span>Com Etat</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="clientEnvoi.id"><span>Client Envoi</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="clientretrait.id"><span>Clientretrait</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="userEnvoi.login"><span>User Envoi</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="userRetrait.login"><span>User Retrait</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let transaction of transactions ;trackBy: trackId">
+                <td><a [routerLink]="['/transaction', transaction.id, 'view' ]">{{transaction.id}}</a></td>
+                <td>{{transaction.date | date:'mediumDate'}}</td>
+                <td>{{transaction.frais}}</td>
+                <td>{{transaction.comEnvoi}}</td>
+                <td>{{transaction.comRetrait}}</td>
+                <td>{{transaction.comSysteme}}</td>
+                <td>{{transaction.comEtat}}</td>
+                <td>
+                    <div *ngIf="transaction.clientEnvoi">
+                        <a [routerLink]="['/client', transaction.clientEnvoi?.id, 'view' ]" >{{transaction.clientEnvoi?.id}}</a>
+                    </div>
+                </td>
+                <td>
+                    <div *ngIf="transaction.clientretrait">
+                        <a [routerLink]="['/client', transaction.clientretrait?.id, 'view' ]" >{{transaction.clientretrait?.id}}</a>
+                    </div>
+                </td>
+                <td>
+                    {{transaction.userEnvoi?.login}}
+                </td>
+                <td>
+                    {{transaction.userRetrait?.login}}
+                </td>
+                <td class="text-right">
+                    <div class="btn-group">
+                        <button type="submit"
+                                [routerLink]="['/transaction', transaction.id, 'view' ]"
+                                class="btn btn-info btn-sm">
+                            <fa-icon [icon]="'eye'"></fa-icon>
+                            <span class="d-none d-md-inline">View</span>
+                        </button>
+                        <button type="submit"
+                                [routerLink]="['/transaction', transaction.id, 'edit']"
+                                class="btn btn-primary btn-sm">
+                            <fa-icon [icon]="'pencil-alt'"></fa-icon>
+                            <span class="d-none d-md-inline">Edit</span>
+                        </button>
+                        <button type="submit"
+                                [routerLink]="['/transaction', { outlets: { popup: transaction.id + '/delete'} }]"
+                                replaceUrl="true"
+                                queryParamsHandling="merge"
+                                class="btn btn-danger btn-sm">
+                            <fa-icon [icon]="'times'"></fa-icon>
+                            <span class="d-none d-md-inline">Delete</span>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div [hidden]="transactions?.length === 0">
+        <div class="row justify-content-center">
+            <jhi-item-count [page]="page" [total]="totalItems" [itemsPerPage]="itemsPerPage"></jhi-item-count>
+        </div>
+        <div class="row justify-content-center">
+            <ngb-pagination [collectionSize]="totalItems" [(page)]="page" [pageSize]="itemsPerPage" [maxSize]="5" [rotate]="true" [boundaryLinks]="true" (pageChange)="loadPage(page)"></ngb-pagination>
+        </div>
+    </div>
+</div>

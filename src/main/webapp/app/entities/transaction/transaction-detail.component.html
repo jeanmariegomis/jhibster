@@ -1,0 +1,67 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="transaction">
+            <h2><span>Transaction</span> {{transaction.id}}</h2>
+            <hr>
+            <jhi-alert-error></jhi-alert-error>
+            <dl class="row-md jh-entity-details">
+                <dt><span>Date</span></dt>
+                <dd>
+                    <span>{{transaction.date}}</span>
+                </dd>
+                <dt><span>Frais</span></dt>
+                <dd>
+                    <span>{{transaction.frais}}</span>
+                </dd>
+                <dt><span>Com Envoi</span></dt>
+                <dd>
+                    <span>{{transaction.comEnvoi}}</span>
+                </dd>
+                <dt><span>Com Retrait</span></dt>
+                <dd>
+                    <span>{{transaction.comRetrait}}</span>
+                </dd>
+                <dt><span>Com Systeme</span></dt>
+                <dd>
+                    <span>{{transaction.comSysteme}}</span>
+                </dd>
+                <dt><span>Com Etat</span></dt>
+                <dd>
+                    <span>{{transaction.comEtat}}</span>
+                </dd>
+                <dt><span>Client Envoi</span></dt>
+                <dd>
+                    <div *ngIf="transaction.clientEnvoi">
+                        <a [routerLink]="['/client', transaction.clientEnvoi?.id, 'view']">{{transaction.clientEnvoi?.id}}</a>
+                    </div>
+                </dd>
+                <dt><span>Clientretrait</span></dt>
+                <dd>
+                    <div *ngIf="transaction.clientretrait">
+                        <a [routerLink]="['/client', transaction.clientretrait?.id, 'view']">{{transaction.clientretrait?.id}}</a>
+                    </div>
+                </dd>
+                <dt><span>User Envoi</span></dt>
+                <dd>
+                    {{transaction.userEnvoi?.login}}
+                </dd>
+                <dt><span>User Retrait</span></dt>
+                <dd>
+                    {{transaction.userRetrait?.login}}
+                </dd>
+            </dl>
+
+            <button type="submit"
+                    (click)="previousState()"
+                    class="btn btn-info">
+                <fa-icon [icon]="'arrow-left'"></fa-icon>&nbsp;<span> Back</span>
+            </button>
+
+            <button type="button"
+                    [routerLink]="['/transaction', transaction.id, 'edit']"
+                    class="btn btn-primary">
+                <fa-icon [icon]="'pencil-alt'"></fa-icon>&nbsp;<span> Edit</span>
+            </button>
+        </div>
+    </div>
+</div>
